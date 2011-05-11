@@ -119,6 +119,10 @@ if __name__ == '__main__':
                       action="store_true", dest="qml", default=False,
                       help=_("Use the QML interface of gPodder"))
 
+    parser.add_option("--qt",
+                      action="store_true", dest="qt", default=False,
+                      help=_("Use the Qt interface of gPodder"))
+
     parser.add_option('-s', '--subscribe', dest='subscribe', metavar='URL',
                       help=_('Subscribe to the given URL'))
 
@@ -170,7 +174,10 @@ if __name__ == '__main__':
             remote_object.subscribe_to_url(options.subscribe)
     else:
         # gPodder is not yet running - create new instance
-        from gpodder import gui
+        if options.qt:
+            from gpodder.qtui import qtmain as gui
+        else:
+            from gpodder import gui
 
         # check if we have an X11 connection (but not on Windows)
         if platform.system() != 'Windows' and \
